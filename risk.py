@@ -9,7 +9,7 @@ def read(url):
     return csv_data
 
 
-def dataManipulation(csv_data):
+def data_manipulation(csv_data):
     #drop duplicates by ID from the Dataframe and rename the column 'arttikelTyp'
     csv_data.drop_duplicates(subset ="id", keep = False, inplace = True)
     csv_data = csv_data.dropna(subset=['category'])
@@ -24,18 +24,20 @@ def dataManipulation(csv_data):
     csv_data['category'] = csv_data['category'].map(cat)
     return csv_data
 
-def serializeJSON(data):
+def add_risk(data):
     #insert Risk as a new column with Value 50 for Cat1 and Value 0 for other Cat.
     risk = {'phone':50,'sim':0,'supplies':0,'headphones':0,'undefined':0}
     data['risk'] = data['category'].map(risk)
+    return data
+
+def serialize_json(row):
     #serialize the Dataframe object to a JSON String
-    jsonStr = data.to_json(orient="records")
-    return jsonStr
+    return row[1].to_json()
 
 #send the PUT request and log the response
-def putJSON(jsonStr):
+def put_json(json_str):
     req = request.Request(url='http://localhost:8080/riskyItems', 
-                          data=jsonStr,
+                          data = json_str.encode('utf-8'),
                           method='PUT', 
                           headers={'content-type': 'application/json'})
     with request.urlopen(req) as f:
@@ -47,8 +49,10 @@ def putJSON(jsonStr):
 def main():
     url = "http://localhost:8080/items"
     csv_data = read(url)
-    data = dataManipulation(csv_data)
-    jsonStr = serializeJSON(data)
-    putJSON(jsonStr)
-    
+    data = data_manipulation(csv_data)
+    enriched_data = add_risk(data)
+    for row in enriched_data.iterrows(): 
+        json_str = serialize_json(row)
+        put_json(json_str)
+        continue
 main()
