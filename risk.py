@@ -17,6 +17,7 @@ def data_manipulation(csv_data):
     
     #Cast the columns below as Integer & fill empty stock entries with 0
     csv_data['category'] = csv_data.category.astype(int)
+    csv_data['price'] = csv_data['price'].multiply(100)
     csv_data['price'] = csv_data.price.astype(int)
     csv_data['stock'] = csv_data['stock'].fillna(0)
     csv_data['stock'] = csv_data.stock.astype(int)
