@@ -1,8 +1,8 @@
 ## Coding Challenge
-This Coding Challende is dedicated to applicants for the integration team at Risk Ident.
+This Coding Challende is dedicated to applicants for the integration team at xxxx.
 
 ### Requirements
-Please send these informations and results to integration@riskident.com:
+Please send these informations and results to xxx
 
 - an estimation how long you'll need to solve this task
 - by when we can expect the solution
